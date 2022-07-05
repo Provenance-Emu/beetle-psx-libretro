@@ -3981,6 +3981,7 @@ end:
 }
 
 // TODO: LoadCommon()
+static bool MDFNI_LoadGame(const char *name);
 
 static bool MDFNI_LoadCD(const char *devicename)
 {
@@ -4115,7 +4116,7 @@ static bool MDFNI_LoadCD(const char *devicename)
    return true;
 }
 #endif
-
+static bool MDFNI_LoadCD(const char *devicename);
 static bool MDFNI_LoadGame(const char *name)
 {
    RFILE *GameFile = NULL;
@@ -4129,7 +4130,7 @@ static bool MDFNI_LoadGame(const char *name)
       !strcasecmp(name + name_len - 4, ".chd") ||
       !strcasecmp(name + name_len - 4, ".pbp")
       ))
-    return MDFNI_LoadCD(name);
+	   return MDFNI_LoadCD(name);
 
    GameFile = filestream_open(name,
          RETRO_VFS_FILE_ACCESS_READ,
