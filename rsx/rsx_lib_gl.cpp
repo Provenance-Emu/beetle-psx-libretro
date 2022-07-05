@@ -25,6 +25,10 @@
 #include "libretro.h"
 #include "libretro_options.h"
 
+//#import <OpenGLES/ES1/gl.h>
+//#import <OpenGLES/ES2/gl.h>
+//#import <OpenGLES/ES2/glext.h>
+
 #include "rsx/rsx_intf.h" //enums
 
 #define DRAWBUFFER_IS_EMPTY(x)           ((x)->map_index == 0)
@@ -398,10 +402,10 @@ static void get_error(const char *msg)
       case GL_OUT_OF_MEMORY:
          log_cb(RETRO_LOG_ERROR, "GL error flag: GL_OUT_OF_MEMORY [%s]\n", msg);
          break;
-      case GL_STACK_UNDERFLOW:
+      case 0x0504:
          log_cb(RETRO_LOG_ERROR, "GL error flag: GL_STACK_UNDERFLOW [%s]\n", msg);
          break;
-      case GL_STACK_OVERFLOW:
+      case 0x0503:
          log_cb(RETRO_LOG_ERROR, "GL error flag: GL_STACK_OVERFLOW [%s]\n", msg);
          break;
       case GL_INVALID_OPERATION:
@@ -799,12 +803,12 @@ static void DrawBuffer_bind_attributes(DrawBuffer<T> *drawbuffer)
                   element_size,
                   (GLvoid*)attr.offset);
             break;
-         case GL_DOUBLE:
-            glVertexAttribLPointer( index,
-                  attr.components,
-                  attr.type,
-                  element_size,
-                  (GLvoid*)attr.offset);
+//         case GL_DOUBLE:
+//            glVertexAttribLPointer( index,
+//                  attr.components,
+//                  attr.type,
+//                  element_size,
+//                  (GLvoid*)attr.offset);
             break;
       }
    }
@@ -1152,7 +1156,7 @@ static void GlRenderer_upload_textures(
 
    glDisable(GL_SCISSOR_TEST);
    glDisable(GL_BLEND);
-   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
    /* Bind the output framebuffer */
    Framebuffer _fb;
@@ -1404,7 +1408,7 @@ static bool GlRenderer_new(GlRenderer *renderer, DrawConfig config)
       DrawBuffer_enable_attribute(command_buffer, "dither");
    }
 
-   GLenum command_draw_mode = wireframe ? GL_LINE : GL_FILL;
+//   GLenum command_draw_mode = wireframe ? GL_LINE : GL_FILL;
 
    if (command_buffer->program)
    {
@@ -1445,7 +1449,7 @@ static bool GlRenderer_new(GlRenderer *renderer, DrawConfig config)
    renderer->vertex_index_pos = 0;
    renderer->command_draw_mode = GL_TRIANGLES;
    renderer->semi_transparency_mode =  SemiTransparencyMode_Average;
-   renderer->command_polygon_mode = command_draw_mode;
+//   renderer->command_polygon_mode = command_draw_mode;
    renderer->output_buffer = output_buffer;
    renderer->image_load_buffer = image_load_buffer;
    renderer->config = config;
@@ -1917,7 +1921,7 @@ static bool retro_refresh_variables(GlRenderer *renderer)
       glUniform1ui(renderer->command_buffer->program->uniforms["dither_scaling"], dither_scaling);
    }
 
-   renderer->command_polygon_mode = wireframe ? GL_LINE : GL_FILL;
+//   renderer->command_polygon_mode = wireframe ? GL_LINE : GL_FILL;
 
    glLineWidth((GLfloat) upscaling);
 
@@ -2568,7 +2572,7 @@ void rsx_gl_finalize_frame(const void *fb, unsigned width,
    bind_libretro_framebuffer(renderer);
 
    glDisable(GL_SCISSOR_TEST);
-   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    glDisable(GL_DEPTH_TEST);
    glDisable(GL_BLEND);
 
@@ -2662,7 +2666,7 @@ void rsx_gl_finalize_frame(const void *fb, unsigned width,
 
       glDisable(GL_SCISSOR_TEST);
       glDisable(GL_BLEND);
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
       Framebuffer_init(&_fb, &renderer->fb_texture);
 
@@ -3216,7 +3220,7 @@ void rsx_gl_load_image(
 
    glDisable(GL_SCISSOR_TEST);
    glDisable(GL_BLEND);
-   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
    /* Bind the output framebuffer */
    Framebuffer_init(&_fb, &renderer->fb_out);
