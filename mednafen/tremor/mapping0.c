@@ -113,16 +113,16 @@ static vorbis_look_mapping *mapping0_look(vorbis_dsp_state *vd,vorbis_info_mode 
 
   return(look);
 }
-//
-//static int ilog(unsigned int v){
-//  int ret=0;
-//  if(v)--v;
-//  while(v){
-//    ret++;
-//    v>>=1;
-//  }
-//  return(ret);
-//}
+
+static int ilog(unsigned int v){
+  int ret=0;
+  if(v)--v;
+  while(v){
+    ret++;
+    v>>=1;
+  }
+  return(ret);
+}
 
 /* also responsible for range checking */
 static vorbis_info_mapping *mapping0_unpack(vorbis_info *vi,oggpack_buffer *opb){
