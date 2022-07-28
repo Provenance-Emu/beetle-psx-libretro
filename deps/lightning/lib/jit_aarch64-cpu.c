@@ -16,8 +16,11 @@
  * Authors:
  *	Paulo Cesar Pereira de Andrade
  */
+#include <lightning.h>
+#include <jit_private.h>
 
 #if PROTO
+
 typedef union {
 /* aarch64-opc.c */
 #  define ui			jit_uint32_t

@@ -20,6 +20,9 @@
 #define jit_arg_reg_p(i)		((i) >= 0 && (i) < 8)
 #define jit_arg_f_reg_p(i)		((i) >= 0 && (i) < 8)
 
+#include <lightning.h>
+#include <jit_private.h>
+
 typedef struct jit_qreg {
     jit_float64_t	l;
     jit_float64_t	h;
@@ -60,7 +63,21 @@ typedef struct jit_va_list {
 static void _patch(jit_state_t*,jit_word_t,jit_node_t*);
 
 /* libgcc */
-extern void __clear_cache(void *, void *);
+#if defined(IOS)
+void sys_icache_invalidate(void *start, size_t len);
+#endif
+
+/* Synchronize data/instruction cache. */
+static void clearCache(void *start, void *end)
+{
+#if defined(IOS)
+    sys_icache_invalidate(start, (char *)end-(char *)start);
+#elif defined(__GNUC__)
+    __builtin___clear_cache(start, end);
+#else
+#error "Missing builtin to flush instruction cache"
+#endif
+}
 
 #define PROTO				1
 #  include "jit_aarch64-cpu.c"
@@ -1512,7 +1529,7 @@ jit_flush(void *fptr, void *tptr)
     s = sysconf(_SC_PAGE_SIZE);
     f = (jit_word_t)fptr & -s;
     t = (((jit_word_t)tptr) + s - 1) & -s;
-    __clear_cache((void *)f, (void *)t);
+    clearCache((void *)f, (void *)t);
 #endif
 }
 
