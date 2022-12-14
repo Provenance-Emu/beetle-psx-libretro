@@ -61,7 +61,7 @@
 #include "libretro.h"
 #include "libretro_options.h"
 
-#if 0 || defined(__APPLE__) || defined(HAVE_OPENGLES3)
+#if defined(__APPLE__) || defined(HAVE_OPENGLES3)
 #define NEW_COPY_RECT
 static const GLushort indices[6] = {0, 1, 2, 2, 1, 3};
 #else
