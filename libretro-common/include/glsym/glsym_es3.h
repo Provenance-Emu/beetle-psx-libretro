@@ -1,5 +1,14 @@
 #ifndef RGLGEN_DECL_H__
 #define RGLGEN_DECL_H__
+
+#ifdef IOS
+#import <OpenGLES/ES3/gl.h>
+#import <OpenGLES/ES3/glext.h>
+#else
+#import <OpenGL/OpenGL.h>
+#import <GLUT/GLUT.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
